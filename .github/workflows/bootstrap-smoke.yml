@@ -30,11 +30,29 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install from public release
+      - name: Install and update while NovaChat is running
         shell: powershell
         run: |
           $ErrorActionPreference = "Stop"
           $env:LOCALAPPDATA = Join-Path $env:RUNNER_TEMP "NovaChatLocalAppData"
+
           powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+          if ($LASTEXITCODE -ne 0) { throw "Initial bootstrap install failed." }
+
           $exe = Join-Path $env:LOCALAPPDATA "NovaChat\bin\novachat.exe"
           if (-not (Test-Path -LiteralPath $exe)) { throw "NovaChat executable was not installed: $exe" }
+
+          # Windows locks the executable image of a running process. Replace the
+          # installed test binary with ping.exe, launch it as novachat.exe, then
+          # ensure the bootstrap updater stops it before installing NovaChat again.
+          Copy-Item -LiteralPath "$env:SystemRoot\System32\ping.exe" -Destination $exe -Force
+          $running = Start-Process -FilePath $exe -ArgumentList @("127.0.0.1", "-n", "30") -PassThru -WindowStyle Hidden
+          Start-Sleep -Milliseconds 500
+          if ($running.HasExited) { throw "Lock simulation process exited too early." }
+
+          powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
+          if ($LASTEXITCODE -ne 0) { throw "Bootstrap update with running NovaChat failed." }
+
+          $running.Refresh()
+          if (-not $running.HasExited) { throw "Bootstrap installer did not stop the running NovaChat process." }
+          if (-not (Test-Path -LiteralPath $exe)) { throw "NovaChat executable disappeared after update." }
