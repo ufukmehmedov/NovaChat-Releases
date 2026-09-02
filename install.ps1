@@ -16,6 +16,52 @@ function Get-MetaValue {
     return ""
 }
 
+function Stop-InstalledNovaChat {
+    if ([string]::IsNullOrWhiteSpace($env:LOCALAPPDATA)) { return }
+
+    $InstalledExe = Join-Path $env:LOCALAPPDATA "NovaChat\bin\novachat.exe"
+    if (-not (Test-Path -LiteralPath $InstalledExe)) { return }
+
+    $TargetPath = [IO.Path]::GetFullPath($InstalledExe)
+    $Processes = @(Get-Process -Name "novachat" -ErrorAction SilentlyContinue)
+    $StoppedAny = $false
+
+    foreach ($Process in $Processes) {
+        $ProcessPath = $null
+        try { $ProcessPath = $Process.Path } catch { }
+
+        $MatchesInstalledExe = $false
+        if ([string]::IsNullOrWhiteSpace($ProcessPath)) {
+            # If Windows does not expose the path, prefer a clean one-command update
+            # over leaving the known NovaChat executable locked.
+            $MatchesInstalledExe = $true
+        }
+        else {
+            try {
+                $MatchesInstalledExe = [string]::Equals(
+                    [IO.Path]::GetFullPath($ProcessPath),
+                    $TargetPath,
+                    [StringComparison]::OrdinalIgnoreCase
+                )
+            }
+            catch { }
+        }
+
+        if ($MatchesInstalledExe) {
+            if (-not $StoppedAny) {
+                Write-Host "Stopping running NovaChat before update..." -ForegroundColor Yellow
+                $StoppedAny = $true
+            }
+            Stop-Process -Id $Process.Id -Force -ErrorAction Stop
+            try { $null = $Process.WaitForExit(5000) } catch { }
+        }
+    }
+
+    if ($StoppedAny) {
+        Start-Sleep -Milliseconds 250
+    }
+}
+
 $TempDir = Join-Path ([IO.Path]::GetTempPath()) ("novachat-bootstrap-" + [Guid]::NewGuid().ToString("N"))
 New-Item -ItemType Directory -Path $TempDir | Out-Null
 
@@ -46,6 +92,8 @@ try {
     if (-not (Test-Path -LiteralPath $Installer)) {
         throw "INSTALL_NOVACHAT_WINDOWS.ps1 not found in package."
     }
+
+    Stop-InstalledNovaChat
 
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $Installer
     if ($LASTEXITCODE -ne 0) {
