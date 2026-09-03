@@ -2,6 +2,8 @@
 
 Official deployment guide for **NovaRelay**, the self-hosted relay used by NovaChat.
 
+The current public package is **NovaRelay `0.7.21-alpha7`**, distributed with **NovaChat `v0.7.21-dist.7`**.
+
 NovaRelay is a raw TCP service, not a web server. NovaChat clients connect to it with an address such as `chat.example.com:7777` — **do not** add `http://` or `https://`.
 
 ## Supported platform
