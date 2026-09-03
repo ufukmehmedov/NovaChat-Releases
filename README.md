@@ -68,6 +68,7 @@ NovaRelay is a raw TCP service. NovaChat clients use an address such as `chat.ex
 
 ## Help and feedback
 
+- Contact: **[events@barkurt.com](mailto:events@barkurt.com)**
 - Read **[SUPPORT.md](SUPPORT.md)** before asking for help.
 - Report reproducible bugs with the **[bug report form](https://github.com/ufukmehmedov/NovaChat-Releases/issues/new?template=bug_report.yml)**.
 - Suggest improvements with the **[feature request form](https://github.com/ufukmehmedov/NovaChat-Releases/issues/new?template=feature_request.yml)**.
