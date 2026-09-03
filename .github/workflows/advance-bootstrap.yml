@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   update-bootstrap:
-    if: startsWith(github.event.release.tag_name, 'v0.7.21-dist.')
+    if: startsWith(github.event.release.tag_name, 'v') && contains(github.event.release.tag_name, '-dist.')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
