@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest an improvement for NovaChat or NovaRelay
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Android
+        - Linux
+        - Windows
+        - NovaRelay
+        - Installer or updater
+        - Documentation
+        - All platforms
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
