@@ -3,7 +3,7 @@ $ErrorActionPreference = "Stop"
 $Repo = "ufukmehmedov/NovaChat-Releases"
 $RawBase = "https://raw.githubusercontent.com/$Repo/main"
 $ReleaseBase = "https://github.com/$Repo/releases/download"
-$MetaUrl = "$RawBase/bootstrap-release.txt"
+$MetaUrl = "$RawBase/bootstrap-release.txt?nocache=$([DateTimeOffset]::UtcNow.ToUnixTimeSeconds())"
 $Headers = @{ "User-Agent" = "NovaChat-Bootstrap" }
 
 function Get-MetaValue {

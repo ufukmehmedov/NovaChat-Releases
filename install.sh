@@ -4,7 +4,7 @@ set -euo pipefail
 REPO="ufukmehmedov/NovaChat-Releases"
 RAW_BASE="https://raw.githubusercontent.com/$REPO/main"
 RELEASE_BASE="https://github.com/$REPO/releases/download"
-META_URL="$RAW_BASE/bootstrap-release.txt"
+META_URL="$RAW_BASE/bootstrap-release.txt?nocache=$(date +%s)"
 
 need() {
   command -v "$1" >/dev/null 2>&1 || {
