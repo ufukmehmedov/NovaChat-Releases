@@ -1,0 +1,26 @@
+name: Create NovaChat Distribution 5
+
+on:
+  push:
+    branches:
+      - release/dist5-shell
+
+permissions:
+  contents: write
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create public prerelease shell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release create v0.7.21-dist.5 \
+            --repo "$GITHUB_REPOSITORY" \
+            --target main \
+            --title 'NovaChat Distribution v0.7.21-dist.5' \
+            --prerelease \
+            --latest=false \
+            --notes 'Android alpha43 / Linux alpha22 / Windows alpha23 / Relay alpha7'
