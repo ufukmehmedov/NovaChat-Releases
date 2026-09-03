@@ -8,9 +8,9 @@ NovaChat and NovaRelay are alpha software. Security fixes are provided only for 
 
 **Do not open a public issue containing vulnerability details, relay passwords, cryptographic keys, message contents, IP addresses or personal data.**
 
-If you believe you found a security vulnerability, open a minimal [security contact request](https://github.com/ufukmehmedov/NovaChat-Releases/issues/new?template=security_contact.yml). State only that you need a private reporting channel and identify the affected component. A maintainer will arrange private communication.
+Send security reports privately to **[events@barkurt.com](mailto:events@barkurt.com)** with the subject **NovaChat Security Report**.
 
-Never include exploitation steps or sensitive evidence in that public request.
+Include the affected component, platform and version. Do not send real relay passwords, cryptographic private keys, message contents or unnecessary personal data. If sensitive evidence is required, first ask for a safe transfer method.
 
 ## Scope
 
@@ -20,5 +20,3 @@ Security reports may concern:
 - NovaRelay
 - Installation and update scripts
 - Package integrity and release verification
-
-Please include the affected version and platform when private contact has been established.
