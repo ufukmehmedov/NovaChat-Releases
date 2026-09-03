@@ -1,10 +1,10 @@
 # NovaChat Releases
 
-Official binary distribution repository for **NovaChat** by **Ruen IT Services**.
+Official binary distribution repository for **NovaChat** and **NovaRelay** by **Ruen IT Services**.
 
 ## Install NovaChat
 
-For the complete installation and update guide, see **[INSTALL.md](INSTALL.md)**.
+For the complete client installation and update guide, see **[INSTALL.md](INSTALL.md)**.
 
 ### Linux (x86_64 / amd64)
 
@@ -24,24 +24,42 @@ irm https://raw.githubusercontent.com/ufukmehmedov/NovaChat-Releases/main/instal
 
 Open a new PowerShell window and start NovaChat with `novachat`.
 
-The bootstrap installers download the current public NovaChat desktop package, verify its SHA-256 checksum, and run the platform installer. Administrator/root access is not required.
+The desktop bootstrap installers download the current public NovaChat package, verify its SHA-256 checksum, and run the platform installer. Administrator/root access is not required.
+
+## Self-host NovaRelay
+
+For the complete network, firewall, static-IP/DDNS and port-forwarding guide, see **[RELAY_INSTALL.md](RELAY_INSTALL.md)**.
+
+On a supported Debian/Ubuntu x86_64 server, the one-command relay installer is:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ufukmehmedov/NovaChat-Releases/main/install-relay.sh | sudo bash
+```
+
+The default relay port is TCP `7777`. The installer creates an isolated systemd service and preserves the relay password when the same port is upgraded.
+
+NovaRelay is a raw TCP service. NovaChat clients use an address such as `chat.example.com:7777`, without `http://` or `https://`.
 
 ## Release files
 
-This repository contains official release artifacts only:
+This repository contains official release artifacts and installation resources only:
 
 - Android APK
 - Linux package
 - Windows package
 - NovaRelay Linux package
 - `INSTALL.md`
+- `RELAY_INSTALL.md`
+- `install.sh`
+- `install.ps1`
+- `install-relay.sh`
 - `release-manifest.json`
 - `SHA256SUMS.txt`
 
-The NovaChat source code is **not published in this repository**.
+The NovaChat and NovaRelay source code is **not published in this repository**.
 
 Public availability of these binaries does not grant permission to copy, modify,
-redistribute, reverse engineer, rebrand, or commercially exploit NovaChat except
-where applicable law provides otherwise.
+redistribute, reverse engineer, rebrand, or commercially exploit NovaChat or
+NovaRelay except where applicable law provides otherwise.
 
 Copyright © Ruen IT Services. All rights reserved.
