@@ -2,6 +2,16 @@
 
 Official client installation instructions for **NovaChat** by **Ruen IT Services**.
 
+## Current client versions
+
+Public release **v0.7.21-dist.7** contains:
+
+- Android: `0.7.21-android-alpha44`
+- Linux: `0.7.21-alpha23`
+- Windows: `0.7.21-alpha24`
+
+On Android, use `/en`, `/bg`, or `/tr` to select English, Bulgarian, or Turkish. Command names such as `broadcast` and `relay` remain unchanged.
+
 NovaChat desktop installers download the current public release from this repository, verify the package with **SHA-256**, and install it for the current user. Administrator/root access is not required.
 
 > Looking to host your own relay? See **[RELAY_INSTALL.md](RELAY_INSTALL.md)**.
