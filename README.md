@@ -2,6 +2,17 @@
 
 Official binary distribution repository for **NovaChat** and **NovaRelay** by **Ruen IT Services**.
 
+## Current public release
+
+The current public pre-release is **[v0.7.21-dist.7](https://github.com/ufukmehmedov/NovaChat-Releases/releases/tag/v0.7.21-dist.7)**:
+
+- Android: `0.7.21-android-alpha44`
+- Linux: `0.7.21-alpha23`
+- Windows: `0.7.21-alpha24`
+- NovaRelay: `0.7.21-alpha7`
+
+Android alpha44 supports `/en`, `/bg`, and `/tr` for English, Bulgarian, and Turkish interface text.
+
 ## Install NovaChat
 
 For the complete client installation and update guide, see **[INSTALL.md](INSTALL.md)**.
