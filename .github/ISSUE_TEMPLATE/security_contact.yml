@@ -1,0 +1,36 @@
+name: Private security contact request
+description: Request a private channel for a possible security vulnerability
+title: "[Security contact request]"
+labels:
+  - security
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not post vulnerability details, exploitation steps, passwords, keys, IP addresses, message contents or personal data here.
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected component
+      options:
+        - Android
+        - Linux
+        - Windows
+        - NovaRelay
+        - Installer or updater
+        - Release infrastructure
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Affected version
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Confirmation
+      options:
+        - label: I have not included vulnerability details or sensitive information in this public request.
+          required: true

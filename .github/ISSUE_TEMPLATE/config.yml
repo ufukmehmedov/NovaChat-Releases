@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Installation documentation
+    url: https://github.com/ufukmehmedov/NovaChat-Releases/blob/main/INSTALL.md
+    about: Read the NovaChat client installation and update guide.
+  - name: NovaRelay documentation
+    url: https://github.com/ufukmehmedov/NovaChat-Releases/blob/main/RELAY_INSTALL.md
+    about: Read the NovaRelay installation and network guide.
