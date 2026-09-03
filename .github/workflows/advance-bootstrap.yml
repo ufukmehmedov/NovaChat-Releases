@@ -1,0 +1,90 @@
+name: Advance Bootstrap To Published Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: advance-bootstrap-release
+  cancel-in-progress: false
+
+jobs:
+  update-bootstrap:
+    if: startsWith(github.event.release.tag_name, 'v0.7.21-dist.')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Read and verify published assets
+        id: release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          [[ "$TAG" =~ ^v[0-9A-Za-z._-]+-dist\.[0-9]+$ ]] || { echo "Invalid distribution tag: $TAG" >&2; exit 1; }
+
+          gh release view "$TAG" --repo "$REPO" --json assets --jq '.assets[].name' > release-assets.txt
+          gh release download "$TAG" --repo "$REPO" --pattern SHA256SUMS.txt
+
+          one_asset() {
+            local pattern="$1"
+            local label="$2"
+            mapfile -t matches < <(grep -E "$pattern" release-assets.txt || true)
+            if (( ${#matches[@]} != 1 )); then
+              echo "Expected exactly one $label asset, found ${#matches[@]}." >&2
+              printf 'Matched: %s\n' "${matches[*]:-none}" >&2
+              exit 1
+            fi
+            printf '%s' "${matches[0]}"
+          }
+
+          asset_sha() {
+            local asset="$1"
+            local sha
+            sha="$(awk -v file="$asset" '$2 == file { print tolower($1) }' SHA256SUMS.txt)"
+            [[ "$sha" =~ ^[0-9a-f]{64}$ ]] || { echo "Missing or invalid SHA-256 for $asset." >&2; exit 1; }
+            printf '%s' "$sha"
+          }
+
+          LINUX_ASSET="$(one_asset '^NovaChat_Linux_[0-9A-Za-z._-]+\.zip$' Linux)"
+          WINDOWS_ASSET="$(one_asset '^NovaChat_Windows_[0-9A-Za-z._-]+\.zip$' Windows)"
+          RELAY_ASSET="$(one_asset '^NovaRelay_[0-9A-Za-z._-]+_linux_amd64\.zip$' NovaRelay)"
+
+          LINUX_SHA256="$(asset_sha "$LINUX_ASSET")"
+          WINDOWS_SHA256="$(asset_sha "$WINDOWS_ASSET")"
+          RELAY_SHA256="$(asset_sha "$RELAY_ASSET")"
+
+          {
+            echo "TAG=$TAG"
+            echo "LINUX_ASSET=$LINUX_ASSET"
+            echo "LINUX_SHA256=$LINUX_SHA256"
+            echo "WINDOWS_ASSET=$WINDOWS_ASSET"
+            echo "WINDOWS_SHA256=$WINDOWS_SHA256"
+            echo "RELAY_ASSET=$RELAY_ASSET"
+            echo "RELAY_SHA256=$RELAY_SHA256"
+          } > bootstrap-release.txt
+
+      - name: Commit newest bootstrap pointer
+        shell: bash
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- bootstrap-release.txt; then
+            echo "Bootstrap metadata already points to $TAG."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add bootstrap-release.txt
+          git commit -m "Point bootstrap installers to $TAG"
+          git push origin HEAD:main
