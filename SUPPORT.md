@@ -7,6 +7,10 @@ NovaChat is currently alpha software. Before reporting a problem:
 3. Read [RELAY_INSTALL.md](RELAY_INSTALL.md) for NovaRelay setup and network help.
 4. Remove passwords, private keys, public IP addresses, message contents and other personal information from screenshots and logs.
 
+## Contact
+
+For general questions, contact **[events@barkurt.com](mailto:events@barkurt.com)**.
+
 ## Report a bug
 
 Use the [NovaChat bug report form](https://github.com/ufukmehmedov/NovaChat-Releases/issues/new?template=bug_report.yml).
