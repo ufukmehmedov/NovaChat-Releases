@@ -1,0 +1,19 @@
+name: Upload INSTALL.md to dist.5
+
+on:
+  push:
+    branches:
+      - release/upload-install-dist5
+
+permissions:
+  contents: write
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Upload installation guide
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload v0.7.21-dist.5 INSTALL.md --repo "$GITHUB_REPOSITORY" --clobber
