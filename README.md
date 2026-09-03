@@ -2,7 +2,9 @@
 
 Official binary distribution repository for **NovaChat** by **Ruen IT Services**.
 
-## One-command install
+## Install NovaChat
+
+For the complete installation and update guide, see **[INSTALL.md](INSTALL.md)**.
 
 ### Linux (x86_64 / amd64)
 
@@ -10,36 +12,29 @@ Official binary distribution repository for **NovaChat** by **Ruen IT Services**
 curl -fsSL https://raw.githubusercontent.com/ufukmehmedov/NovaChat-Releases/main/install.sh | bash
 ```
 
-Then start NovaChat with:
+Start NovaChat with `novachat`.
 
-```bash
-novachat
-```
+### Windows (x64)
 
-### Windows
-
-Open **PowerShell** and run:
+Open PowerShell and run:
 
 ```powershell
 irm https://raw.githubusercontent.com/ufukmehmedov/NovaChat-Releases/main/install.ps1 | iex
 ```
 
-Then open a new PowerShell window and run:
-
-```powershell
-novachat
-```
+Open a new PowerShell window and start NovaChat with `novachat`.
 
 The bootstrap installers download the current public NovaChat desktop package, verify its SHA-256 checksum, and run the platform installer. Administrator/root access is not required.
 
 ## Release files
 
-This repository contains release artifacts only:
+This repository contains official release artifacts only:
 
 - Android APK
 - Linux package
 - Windows package
 - NovaRelay Linux package
+- `INSTALL.md`
 - `release-manifest.json`
 - `SHA256SUMS.txt`
 
