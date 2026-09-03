@@ -1,8 +1,10 @@
 # NovaChat Installation Guide
 
-Official installation instructions for **NovaChat** by **Ruen IT Services**.
+Official client installation instructions for **NovaChat** by **Ruen IT Services**.
 
 NovaChat desktop installers download the current public release from this repository, verify the package with **SHA-256**, and install it for the current user. Administrator/root access is not required.
+
+> Looking to host your own relay? See **[RELAY_INSTALL.md](RELAY_INSTALL.md)**.
 
 ## Windows (x64)
 
