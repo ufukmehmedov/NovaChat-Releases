@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="240" viewBox="0 0 960 240" role="img" aria-labelledby="title desc">
+  <title id="title">Ruen IT Services</title>
+  <desc id="desc">Ruen IT Services neon technology wordmark</desc>
+  <rect width="960" height="240" rx="28" fill="#0b0b0e"/>
+  <g transform="translate(54 40)">
+    <path d="M20 150V10h74c41 0 66 21 66 55 0 25-14 43-38 51l45 34h-48l-39-30H58v30H20zm38-65h34c19 0 29-7 29-20s-10-20-29-20H58v40z" fill="#55e650"/>
+    <path d="M8 166h170" stroke="#41dce6" stroke-width="5"/>
+    <circle cx="8" cy="166" r="6" fill="#41dce6"/>
+    <circle cx="178" cy="166" r="6" fill="#41dce6"/>
+  </g>
+  <text x="260" y="112" fill="#f0f0f5" font-family="Arial, Helvetica, sans-serif" font-size="66" font-weight="700" letter-spacing="2">RUEN</text>
+  <text x="264" y="164" fill="#41dce6" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="600" letter-spacing="8">IT SERVICES</text>
+  <path d="M264 187h570" stroke="#55e650" stroke-width="3"/>
+  <circle cx="850" cy="187" r="5" fill="#55e650"/>
+</svg>
