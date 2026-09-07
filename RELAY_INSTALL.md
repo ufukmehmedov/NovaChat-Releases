@@ -2,9 +2,9 @@
 
 Official deployment guide for **NovaRelay**, the self-hosted relay used by NovaChat.
 
-The current public package is **NovaRelay `0.7.21-alpha7`**, distributed with **NovaChat `v0.7.21-dist.7`**.
-
 NovaRelay is a raw TCP service, not a web server. NovaChat clients connect to it with an address such as `chat.example.com:7777` — **do not** add `http://` or `https://`.
+
+The public one-command installer does **not** hard-code a `dist` tag. It reads `bootstrap-release.txt`, downloads the NovaRelay package referenced there from GitHub Releases, and verifies its SHA-256 checksum before installation. After a new `v...-dist.N` release is published, repository automation advances the pointer to that release.
 
 ## Supported platform
 
@@ -17,7 +17,7 @@ The public NovaRelay package currently targets:
 
 For the simplest deployment, use a small VPS with a public IPv4 address. A home server also works when the router and ISP allow inbound port forwarding.
 
-## One-command installation
+## Install or update
 
 Run this on the Linux machine that will host the relay:
 
@@ -35,13 +35,36 @@ curl -fsSL https://raw.githubusercontent.com/ufukmehmedov/NovaChat-Releases/main
 
 The installer:
 
-- downloads the current public NovaRelay release;
+- downloads the currently referenced public NovaRelay release;
 - verifies the ZIP package with SHA-256;
 - installs the relay as an isolated systemd service;
 - creates a dedicated unprivileged `novarelay` system account if needed;
 - stores each relay instance in its own directory;
 - enables the service at boot and starts it immediately;
 - preserves an existing relay password when the same port is upgraded.
+
+Running the same install command again updates that relay instance to the distribution referenced by `bootstrap-release.txt`.
+
+## Uninstall a relay instance
+
+The following removes the service and installed binary for TCP port `7777` but **preserves** the relay password and state under `/var/lib/novarelay/7777`:
+
+```bash
+PORT=7777
+sudo systemctl disable --now "novarelay-$PORT.service" 2>/dev/null || true
+sudo rm -f "/etc/systemd/system/novarelay-$PORT.service"
+sudo rm -rf "/opt/novarelay/$PORT"
+sudo systemctl daemon-reload
+```
+
+To permanently delete the preserved relay password and state as well, run this only after confirming the port number:
+
+```bash
+PORT=7777
+sudo rm -rf "/var/lib/novarelay/$PORT"
+```
+
+Removing the relay service does not automatically remove router port-forwarding rules, cloud firewall rules, or host firewall rules. Remove those separately if they are no longer needed.
 
 ## Files created by the installer
 
@@ -180,10 +203,6 @@ novarelay-7778.service
 ```
 
 If the machine is behind a router, forward every port that you actually use.
-
-## Updating NovaRelay
-
-Run the same installer again for the existing port. The binary and systemd unit are refreshed while the instance state directory and existing `relay_password.txt` are preserved.
 
 ## What the relay can see
 
