@@ -6,33 +6,25 @@ Official binary distribution repository for **NovaChat** and **NovaRelay** by **
 
 ## Download NovaChat
 
-The current public pre-release is **[v0.7.21-dist.7](https://github.com/ufukmehmedov/NovaChat-Releases/releases/tag/v0.7.21-dist.7)**:
+Use the **[Releases](https://github.com/ufukmehmedov/NovaChat-Releases/releases)** page for the newest public distribution and its checksums.
 
-| Platform | Version | Download / install |
-| --- | --- | --- |
-| Android | `0.7.21-android-alpha44` | **[Download APK](https://github.com/ufukmehmedov/NovaChat-Releases/releases/download/v0.7.21-dist.7/NovaChat_Android_0.7.21-android-alpha44.apk)** |
-| Linux | `0.7.21-alpha23` | Use the installation command below |
-| Windows | `0.7.21-alpha24` | Use the installation command below |
-| NovaRelay | `0.7.21-alpha7` | See the self-hosting section |
-
-Android alpha44 supports `/en`, `/bg`, and `/tr` for English, Bulgarian, and Turkish interface text.
-
-For checksums and every downloadable file, open the **[release page](https://github.com/ufukmehmedov/NovaChat-Releases/releases/tag/v0.7.21-dist.7)**.
+The Linux, Windows, and NovaRelay bootstrap installers do **not** hard-code a `dist` tag. They read `bootstrap-release.txt`, verify the referenced package with SHA-256, and install that published distribution. Repository automation advances the pointer when a new `v...-dist.N` release is published.
 
 ## Install NovaChat
 
-For the complete client installation and update guide, see **[INSTALL.md](INSTALL.md)**.
+For the complete client installation, update, and uninstall guide, see **[INSTALL.md](INSTALL.md)**.
 
 ### Android
 
-1. Download the official APK using the link above.
-2. Open the downloaded file on the Android device.
-3. If Android asks, temporarily allow installation from the app used to open the APK.
-4. Confirm the installation.
+Download the newest `NovaChat_Android_*.apk` from the **[Releases](https://github.com/ufukmehmedov/NovaChat-Releases/releases)** page and install it on the Android device.
 
-Only install NovaChat files published by **Ruen IT Services** in this repository.
+To uninstall:
+
+**Settings → Apps → NovaChat → Uninstall**
 
 ### Linux (x86_64 / amd64)
+
+Install or update to the currently published distribution:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/ufukmehmedov/NovaChat-Releases/main/install.sh | bash
@@ -40,9 +32,17 @@ curl -fsSL https://raw.githubusercontent.com/ufukmehmedov/NovaChat-Releases/main
 
 Start NovaChat with `novachat`.
 
+Uninstall the program while preserving profile/keys/history:
+
+```bash
+pkill -x novachat 2>/dev/null || true
+rm -rf "$HOME/.local/lib/novachat"
+rm -f "$HOME/.local/bin/novachat" "$HOME/.local/share/applications/novachat.desktop"
+```
+
 ### Windows (x64)
 
-Open PowerShell and run:
+Open PowerShell and install or update to the currently published distribution:
 
 ```powershell
 irm https://raw.githubusercontent.com/ufukmehmedov/NovaChat-Releases/main/install.ps1 | iex
@@ -50,19 +50,45 @@ irm https://raw.githubusercontent.com/ufukmehmedov/NovaChat-Releases/main/instal
 
 Open a new PowerShell window and start NovaChat with `novachat`.
 
-The desktop bootstrap installers download the current public NovaChat package, verify its SHA-256 checksum, and run the platform installer. Administrator/root access is not required.
+Uninstall the program while preserving profile/keys/history:
+
+```powershell
+Get-Process novachat -ErrorAction SilentlyContinue | Stop-Process -Force
+$root = Join-Path $env:LOCALAPPDATA "NovaChat"
+$bin = Join-Path $root "bin"
+Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
+$p = [Environment]::GetEnvironmentVariable("Path", "User")
+if ($p) {
+    $clean = (($p -split ';') | Where-Object {
+        $_ -and $_.Trim().TrimEnd('\') -ine $bin.TrimEnd('\')
+    }) -join ';'
+    [Environment]::SetEnvironmentVariable("Path", $clean, "User")
+}
+```
+
+The preserved local data directory is `~/.novachat-e2ee` on Linux and `~\.novachat-e2ee` on Windows. Delete it separately only if you intentionally want to erase the local profile, keys, and history.
 
 ## Self-host NovaRelay
 
-For the complete network, firewall, static-IP/DDNS and port-forwarding guide, see **[RELAY_INSTALL.md](RELAY_INSTALL.md)**.
+For the complete network, firewall, static-IP/DDNS, port-forwarding, update, and uninstall guide, see **[RELAY_INSTALL.md](RELAY_INSTALL.md)**.
 
-On a supported Debian/Ubuntu x86_64 server, the one-command relay installer is:
+On a supported Debian/Ubuntu x86_64 server, install or update NovaRelay with:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/ufukmehmedov/NovaChat-Releases/main/install-relay.sh | sudo bash
 ```
 
 The default relay port is TCP `7777`. The installer creates an isolated systemd service and preserves the relay password when the same port is upgraded.
+
+Uninstall the relay service and binary for port `7777` while preserving its password/state:
+
+```bash
+PORT=7777
+sudo systemctl disable --now "novarelay-$PORT.service" 2>/dev/null || true
+sudo rm -f "/etc/systemd/system/novarelay-$PORT.service"
+sudo rm -rf "/opt/novarelay/$PORT"
+sudo systemctl daemon-reload
+```
 
 NovaRelay is a raw TCP service. NovaChat clients use an address such as `chat.example.com:7777`, without `http://` or `https://`.
 
