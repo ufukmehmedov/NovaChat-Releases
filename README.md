@@ -14,6 +14,14 @@ The Linux, Windows, and NovaRelay bootstrap installers do **not** hard-code a `d
 
 For the complete client installation, update, and uninstall guide, see **[INSTALL.md](INSTALL.md)**.
 
+## User guide
+
+The English September 2026 user guide is available here:
+
+- **[NovaChat User Guide - English](docs/NovaChat_User_Guide_EN_2026-09.md)**
+
+The guide is based on the September 2026 Bulgarian handbook and has been updated for public distribution `v0.7.21-dist.9`, including the latest desktop input/edit/clipboard notes and the current-source EN/BG/TR localization work planned for the next distribution.
+
 ### Android
 
 Download the newest `NovaChat_Android_*.apk` from the **[Releases](https://github.com/ufukmehmedov/NovaChat-Releases/releases)** page and install it on the Android device.
@@ -60,7 +68,7 @@ Remove-Item -LiteralPath $root -Recurse -Force -ErrorAction SilentlyContinue
 $p = [Environment]::GetEnvironmentVariable("Path", "User")
 if ($p) {
     $clean = (($p -split ';') | Where-Object {
-        $_ -and $_.Trim().TrimEnd('\') -ine $bin.TrimEnd('\')
+        $_ -and $_.Trim().TrimEnd('\\') -ine $bin.TrimEnd('\\')
     }) -join ';'
     [Environment]::SetEnvironmentVariable("Path", $clean, "User")
 }
@@ -108,6 +116,7 @@ This repository contains official release artifacts and installation resources o
 - Linux package
 - Windows package
 - NovaRelay Linux package
+- English user guide
 - `INSTALL.md`
 - `RELAY_INSTALL.md`
 - `install.sh`
