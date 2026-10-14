@@ -1,6 +1,12 @@
 name: Advance Bootstrap To Published Release
 
 on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Published Desktop distribution tag
+        required: true
+        type: string
   release:
     types: [published]
 
@@ -13,7 +19,7 @@ concurrency:
 
 jobs:
   update-bootstrap:
-    if: startsWith(github.event.release.tag_name, 'v') && contains(github.event.release.tag_name, '-dist.')
+    if: github.event_name == 'workflow_dispatch' || (startsWith(github.event.release.tag_name, 'v') && contains(github.event.release.tag_name, '-dist.'))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout main
@@ -26,7 +32,7 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ inputs.tag || github.event.release.tag_name }}
           REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
@@ -57,11 +63,9 @@ jobs:
 
           LINUX_ASSET="$(one_asset '^NovaChat_Linux_[0-9A-Za-z._-]+\.zip$' Linux)"
           WINDOWS_ASSET="$(one_asset '^NovaChat_Windows_[0-9A-Za-z._-]+\.zip$' Windows)"
-          RELAY_ASSET="$(one_asset '^NovaRelay_[0-9A-Za-z._-]+_linux_amd64\.zip$' NovaRelay)"
 
           LINUX_SHA256="$(asset_sha "$LINUX_ASSET")"
           WINDOWS_SHA256="$(asset_sha "$WINDOWS_ASSET")"
-          RELAY_SHA256="$(asset_sha "$RELAY_ASSET")"
 
           {
             echo "TAG=$TAG"
@@ -69,14 +73,12 @@ jobs:
             echo "LINUX_SHA256=$LINUX_SHA256"
             echo "WINDOWS_ASSET=$WINDOWS_ASSET"
             echo "WINDOWS_SHA256=$WINDOWS_SHA256"
-            echo "RELAY_ASSET=$RELAY_ASSET"
-            echo "RELAY_SHA256=$RELAY_SHA256"
           } > bootstrap-release.txt
 
       - name: Commit newest bootstrap pointer
         shell: bash
         env:
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ inputs.tag || github.event.release.tag_name }}
         run: |
           set -euo pipefail
           if git diff --quiet -- bootstrap-release.txt; then

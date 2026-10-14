@@ -8,7 +8,7 @@ Official binary distribution repository for **NovaChat** and **NovaRelay** by **
 
 Use the **[Releases](https://github.com/ufukmehmedov/NovaChat-Releases/releases)** page for the newest public distribution and its checksums.
 
-The Linux, Windows, and NovaRelay bootstrap installers do **not** hard-code a `dist` tag. They read `bootstrap-release.txt`, verify the referenced package with SHA-256, and install that published distribution. Repository automation advances the pointer when a new `v...-dist.N` release is published.
+Linux and Windows installers read `bootstrap-release.txt` and verify package SHA-256 hashes. New releases contain Desktop packages only. Android is distributed privately. Relay 10 is deployed only to the operated production service and is not published here. The legacy self-hosted relay installer uses a separate `relay-bootstrap-release.txt` pointer to the previously published Relay 7 package; it does not install Relay 10.
 
 ## Install NovaChat
 
@@ -115,7 +115,7 @@ This repository contains official release artifacts and installation resources o
 - Android APK
 - Linux package
 - Windows package
-- NovaRelay Linux package
+- Historical releases only: legacy NovaRelay Linux package
 - English user guide
 - `INSTALL.md`
 - `RELAY_INSTALL.md`
